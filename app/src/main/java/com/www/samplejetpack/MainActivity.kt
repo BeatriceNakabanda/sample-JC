@@ -13,6 +13,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.Role.Companion.Button
@@ -31,6 +33,20 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun MainScreen(){
+//    var counter = 0
+    //*remember makes composable remember its old state...without knowing its old state, it cant know its state has changed
+    var counter = remember{ mutableStateOf(0) } //*mutableStateOf() - makes it possible for the composable to
+//    listen to the changes happening to the state....Acts as a listener....composable will get notified when the
+    //counter value changes
+    //lambda
+    var increaseCounter = {
+        Log.i("MAIN SCREEN", "Counter value is ${counter.value}")
+        counter.value = counter.value+1
+    }
+    var decreaseCounter = {
+        Log.i("MAIN SCREEN", "Counter value is ${counter.value}")
+        counter.value= counter.value-1
+    }
 //    Text(text = "Hello World")
     Column(modifier = Modifier.fillMaxSize(),
     verticalArrangement = Arrangement.Center,
@@ -41,11 +57,12 @@ fun MainScreen(){
             .padding(2.dp),
             horizontalArrangement = Arrangement.SpaceEvenly
         ){
-            Button(onClick ={ Log.e("Main screen","Button clicked")}){
-                Text(text = "Click me 1")
+            Button(onClick ={ decreaseCounter.invoke() }){
+                Text(text = "Decrement")
             }
-            Button(onClick ={ Log.e("Main screen","Button clicked")}){
-                Text(text = "Click me 2")
+            Text(text = "${counter.value}")
+            Button(onClick ={ increaseCounter.invoke() }){
+                Text(text = "Increment")
             }
         }
     }
